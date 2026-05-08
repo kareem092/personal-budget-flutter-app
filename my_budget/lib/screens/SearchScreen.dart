@@ -1,7 +1,5 @@
-// import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:my_budget/widgets/filterbutton.dart';
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
@@ -20,7 +18,7 @@ class SearchScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // 🔍 مربع البحث
+          //  مربع البحث
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
@@ -38,15 +36,15 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
 
-          // 🟦 أزرار الفلترة
+          //  أزرار الفلترة
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _filterButton("الكل"),
-                _filterButton("مصاريف"),
-                _filterButton("دخل"),
-                _filterButton("هذا الشهر"),
+                filterButton("الكل"),
+                filterButton("مصاريف"),
+                filterButton("دخل"),
+                filterButton("هذا الشهر"),
                 
               ],
             ),
@@ -67,7 +65,7 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
 
-          // 📊 نتائج البحث
+          //  نتائج البحث
           Expanded(
             child: ListView(
               children: [
@@ -112,7 +110,7 @@ class SearchScreen extends StatelessWidget {
 
           SizedBox(height: 15,),
 
-          // 🕘 عمليات بحث سابقة
+          //  عمليات بحث سابقة
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -129,7 +127,7 @@ class SearchScreen extends StatelessWidget {
         ],
       ),
 
-      // 🔽 شريط التنقل السفلي
+      //  شريط التنقل السفلي
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
@@ -146,18 +144,10 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  // 🔘 زر فلترة
-  Widget _filterButton(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(text),
-      ),
-    );
-  }
+  //  زر فلترة
+  
 
-  // 🧾 عنصر معاملة
+  //  عنصر معاملة
   Widget _transactionItem({
     required String title,
     required String amount,

@@ -6,7 +6,7 @@ class InfoCard extends StatelessWidget {
   final Color color;
   final IconData icon;
 
-  InfoCard({
+  const InfoCard({
     super.key,
     required this.title,
     required this.value,

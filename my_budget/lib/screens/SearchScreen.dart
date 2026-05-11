@@ -1,8 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/data/dummy_data.dart';
+import 'package:my_budget/screens/HomeScreen.dart';
+import 'package:my_budget/screens/SettingScreen.dart';
 import 'package:my_budget/widgets/filterbutton.dart';
-class SearchScreen extends StatelessWidget {
+import 'package:my_budget/widgets/transaction_item.dart';
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  List<TransactionItem> filterTransactionItem = dummyTransactionItem;
+
+  void _filterTransactionItem(String query) {
+    setState(() {
+      filterTransactionItem = dummyTransactionItem.where((transactionItem){
+        return transactionItem.title.contains(query) ||
+        transactionItem.category.contains(query) ||
+        transactionItem.amount.contains(query);
+      }).toList();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +42,7 @@ class SearchScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
-
+              onChanged: _filterTransactionItem,
               decoration: InputDecoration(
                 hintText: "ابحث عن معاملة، فئة، أو مبلغ...",
                 suffix: const Icon(Icons.search),
@@ -41,10 +61,26 @@ class SearchScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                filterButton("الكل"),
-                filterButton("مصاريف"),
-                filterButton("دخل"),
-                filterButton("هذا الشهر"),
+                FilterButton(title: "الكل",
+                onPressed: () {
+                  filterTransactionItem = dummyTransactionItem;
+                },),
+                FilterButton(title: "مصاريف",
+                onPressed: () {
+                  filterTransactionItem = dummyTransactionItem.where((transactionItem){
+                    return transactionItem.category.contains('مصاريف');
+                  }).toList();
+                },),
+                FilterButton(title: "دخل",
+                onPressed: () {
+                  filterTransactionItem = dummyTransactionItem.where((transactionItem){
+                    return transactionItem.category.contains('دخل');
+                  }).toList();
+                },),
+                FilterButton(title: "هذا الشهر",
+                onPressed: () {
+                  
+                },),
                 
               ],
             ),
@@ -60,41 +96,51 @@ class SearchScreen extends StatelessWidget {
               children: [
                 Text("نتائج البحث",
                 style: TextStyle(fontSize: 20),),
-                Text("3 نتائج موجودة", style: TextStyle(color: Colors.grey[400]),)
+                Text(" نتائج موجودة ${filterTransactionItem.length}", style: TextStyle(color: Colors.grey[400]),)
               ],
             ),
           ),
 
           //  نتائج البحث
           Expanded(
-            child: ListView(
-              children: [
-                _transactionItem(
-                  title: "كارفور هايبر ماركت",
-                  amount: "- 450.00 رس",
-                  date: "24 أكتوبر 2023",
-                  category: "بقالة",
-                  icon: Icons.shopping_cart,
-                  color: Colors.red,
+            child: filterTransactionItem.isEmpty?
+            const Center(
+              child: Text('لا توجد معاملات مطابقة',
+              style: TextStyle(fontSize: 16, color: Colors.grey),),
+            ): ListView.builder(
+              itemCount: filterTransactionItem.length,
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              itemBuilder: (context, index){
+              final TransactionItem transactionItem = filterTransactionItem[index];
+              return Card(
+                elevation: 3,
+                margin: const EdgeInsets.only(bottom: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(12),
                 ),
-                _transactionItem(
-                  title: "تحويل راتب",
-                  amount: "+ 12,500.00 رس",
-                  date: "25 أكتوبر 2023",
-                  category: "دخل",
-                  icon: Icons.attach_money,
-                  color: Colors.green,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 28,
+                    child: Icon(transactionItem.icon),
+                  ),
+                  title: Text(
+                    transactionItem.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  subtitle: Text(
+                    '${transactionItem.category}.${transactionItem.date}'
+                  ),
+                  trailing: Text(
+                    transactionItem.amount,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,
+                    color: transactionItem.category=='دخل'? Colors.green: Colors.red
+                    ),
+                  ),
                 ),
-                _transactionItem(
-                  title: "مطعم البيك",
-                  amount: "- 85.50 رس",
-                  date: "22 أكتوبر 2023",
-                  category: "مطاعم",
-                  icon: Icons.restaurant,
-                  color: Colors.red,
-                ),
-              ],
-            ),
+              );
+            })
           ),
           SizedBox(height: 15,),
 
@@ -132,12 +178,24 @@ class SearchScreen extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "الرئيسية"),
+        currentIndex: 2,
+        items:  [
+          BottomNavigationBarItem(icon: IconButton(onPressed: () {
+            Navigator.of(context).push( 
+              MaterialPageRoute(builder: (context)=>HomeScreen()));
+          },
+          icon: Icon(Icons.home),
+          ),
+           label: "الرئيسية"),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "الإحصائيات"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "البحث"),
           BottomNavigationBarItem(icon: Icon(Icons.category), label: "الفئات"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "الإعدادات"),
+          BottomNavigationBarItem(icon: IconButton(onPressed: () {
+            Navigator.of(context).push( 
+              MaterialPageRoute(builder: (context)=>SettingsScreen()));
+          },
+          icon:  Icon(Icons.settings)),
+            label: "الإعدادات"),
         ],
 
       ),
@@ -145,29 +203,6 @@ class SearchScreen extends StatelessWidget {
   }
 
   //  زر فلترة
-  
-
-  //  عنصر معاملة
-  Widget _transactionItem({
-    required String title,
-    required String amount,
-    required String date,
-    required String category,
-    required IconData icon,
-    required Color color,
-  }) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ListTile(
-        leading: Icon(icon, color: color),
-        title: Text(title, textAlign: TextAlign.right),
-        subtitle: Text("$category • $date", textAlign: TextAlign.right),
-        trailing: Text(amount,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            )),
-      ),
-    );
-  }
 }
+
+

@@ -28,7 +28,9 @@ class MyBudgetApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My Budget',
       theme: ThemeData(primarySwatch: Colors.teal),
+
       home: SearchScreen(),
+
     );
   }
 }

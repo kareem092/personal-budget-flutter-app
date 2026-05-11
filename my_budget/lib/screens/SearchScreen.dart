@@ -63,7 +63,9 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 FilterButton(title: "الكل",
                 onPressed: () {
-                  filterTransactionItem = dummyTransactionItem;
+                 setState(() {
+                   filterTransactionItem = dummyTransactionItem;
+                 }); 
                 },),
                 FilterButton(title: "مصاريف",
                 onPressed: () {
@@ -73,9 +75,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 },),
                 FilterButton(title: "دخل",
                 onPressed: () {
-                  filterTransactionItem = dummyTransactionItem.where((transactionItem){
+                 setState(() {
+                   filterTransactionItem = dummyTransactionItem.where((transactionItem){
                     return transactionItem.category.contains('دخل');
                   }).toList();
+                 }); 
                 },),
                 FilterButton(title: "هذا الشهر",
                 onPressed: () {

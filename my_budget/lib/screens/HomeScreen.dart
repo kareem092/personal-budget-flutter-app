@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/screens/AddIncomeScreen.dart';
+import 'package:my_budget/screens/TransactionsScreen.dart';
+import 'package:my_budget/screens/categoriesScreen.dart';
 
 void main() {
   runApp(MyBudgetApp());
@@ -45,10 +48,17 @@ class HomeScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              navItem(Icons.home, "الرئيسية", true),
-              navItem(Icons.receipt_long, "العمليات", false),
-              navItem(Icons.add_circle, "إضافة", false),
-              navItem(Icons.account_balance_wallet, "الحسابات", false),
+              navItem(Icons.home, "الرئيسية", true,(){
+
+              }),
+              navItem(Icons.receipt_long, "العمليات", false,
+              (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => TransactionsScreen(),));
+              }),
+              navItem(Icons.add_circle, "إضافة", false,(){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => IncomeScreen(),));
+              }),
+              navItem(Icons.account_balance_wallet, "الحسابات", false,(){}),
             ],
           ),
         ),
@@ -377,12 +387,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget navItem(IconData icon, String title, bool active) {
+  Widget navItem(IconData icon, String title, bool active, VoidCallback onPressed) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: active ? primaryColor : Colors.grey),
-        const SizedBox(height: 5),
+       IconButton(onPressed: onPressed, icon: Icon(icon, color: active ? primaryColor : Colors.grey),) 
+       , const SizedBox(height: 5),
         Text(
           title,
           style: TextStyle(

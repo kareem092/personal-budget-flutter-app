@@ -249,6 +249,7 @@ class TransactionsScreen extends StatelessWidget {
               _navItem(
                 icon: Icons.home,
                 label: 'الرئيسية',
+                
               ),
 
               _navItem(

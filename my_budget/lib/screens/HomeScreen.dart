@@ -1,280 +1,374 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
+void main() {
+  runApp(MyBudgetApp());
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int selectedTabIndex = 0;
+class MyBudgetApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'ميزانيتك',
+      theme: ThemeData(
+        fontFamily: 'Tajawal',
+        scaffoldBackgroundColor: const Color(0xffF8F9FA),
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
 
-  final List<String> tabs = ["الكل", "كاش", "بطاقة"];
+class HomeScreen extends StatelessWidget {
+  final Color primaryColor = const Color(0xff1A56DB);
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xffF8F9FA),
+
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("زر الإضافة")),
-            );
-          },
-          backgroundColor: Color(0xFF20D67B),
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Icon(
-            Icons.add,
-            size: 32,
+          backgroundColor: primaryColor,
+          child: const Icon(Icons.add, color: Colors.white),
+          onPressed: () {},
+        ),
+
+        bottomNavigationBar: Container(
+          height: 75,
+          decoration: const BoxDecoration(
             color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              navItem(Icons.home, "الرئيسية", true),
+              navItem(Icons.receipt_long, "العمليات", false),
+              navItem(Icons.add_circle, "إضافة", false),
+              navItem(Icons.account_balance_wallet, "الحسابات", false),
+            ],
           ),
         ),
+
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: const EdgeInsets.all(20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 4),
-
-                // Top Bar
+                /// APP BAR
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.menu,
-                        size: 30,
-                        color: Color(0xFF1E1E1E),
+                    const CircleAvatar(
+                      radius: 22,
+                      backgroundImage: NetworkImage(
+                        "https://i.pravatar.cc/150?img=3",
                       ),
                     ),
+
                     Text(
-                      "مصرفيات",
+                      "ميزانيتك",
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1E1E1E),
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.settings,
-                        size: 28,
-                        color: Color(0xFF1E1E1E),
-                      ),
-                    ),
+
+                    Icon(Icons.menu, size: 30, color: Colors.grey.shade700),
                   ],
                 ),
 
-                SizedBox(height: 18),
+                const SizedBox(height: 25),
 
-                // Balance Card
+                /// BALANCE CARD
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(22),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF1FAF52),
-                        Color(0xFF169442),
-                      ],
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
+                    borderRadius: BorderRadius.circular(28),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xff1A56DB), Color(0xff003FB1)],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0x331FAF52),
-                        blurRadius: 18,
-                        offset: Offset(0, 8),
+                        color: Colors.blue.withOpacity(0.2),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Icon(
-                          Icons.arrow_outward_rounded,
-                          color: Colors.white,
-                          size: 28,
-                        ),
+                      const Text(
+                        "الرصيد الكلي",
+                        style: TextStyle(color: Colors.white70, fontSize: 15),
                       ),
-                      SizedBox(height: 18),
-                      Text(
-                        "الرصيد الحالي",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.95),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          "3,450.00 ر.ي",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth < 360 ? 30 : 36,
-                            fontWeight: FontWeight.bold,
+
+                      const SizedBox(height: 10),
+
+                      Row(
+                        children: const [
+                          Text(
+                            "24,500",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 38,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 10),
+                          Text(
+                            "ريال",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              smallIcon(Icons.credit_card),
+                              const SizedBox(width: 10),
+                              smallIcon(Icons.payments),
+                            ],
+                          ),
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: const Text(
+                              "تفاصيل الحساب",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 14),
+                const SizedBox(height: 25),
 
-                // Dots
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF1FAF52),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 18),
-
-                // Tabs
+                /// FILTER BUTTONS
                 Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFD8D8D8)),
-                    borderRadius: BorderRadius.circular(22),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: Row(
-                    children: List.generate(tabs.length, (index) {
-                      bool isSelected = selectedTabIndex == index;
-
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedTabIndex = index;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? Color(0xFFE9EFE8)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: Center(
-                              child: Text(
-                                tabs[index],
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1E1E1E),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                    children: [
+                      periodButton("يوم", false),
+                      periodButton("أسبوع", false),
+                      periodButton("شهر", true),
+                      periodButton("سنة", false),
+                    ],
                   ),
                 ),
 
-                SizedBox(height: 26),
+                const SizedBox(height: 30),
 
-                // Chart + Legend
+                /// ACCOUNTS
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "الحسابات",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Text(
+                      "عرض الكل",
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 150,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      accountCard(
+                        Icons.payments,
+                        "نقدي",
+                        "4,200 ريال",
+                        Colors.green,
+                      ),
+
+                      accountCard(
+                        Icons.credit_card,
+                        "بطاقة مدى",
+                        "18,300 ريال",
+                        Colors.blue,
+                      ),
+
+                      accountCard(
+                        Icons.savings,
+                        "ادخار",
+                        "2,000 ريال",
+                        Colors.red,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                /// INCOME & EXPENSE
+                Row(
                   children: [
                     Expanded(
-                      flex: 5,
-                      child: Center(
-                        child: SizedBox(
-                          width: screenWidth * 0.42,
-                          height: screenWidth * 0.42,
-                          child: CustomPaint(
-                            painter: DonutChartPainter(),
+                      child: summaryCard(
+                        Icons.arrow_downward,
+                        "الدخل",
+                        "+12,400",
+                        Colors.green,
+                      ),
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    Expanded(
+                      child: summaryCard(
+                        Icons.arrow_upward,
+                        "المصاريف",
+                        "-5,120",
+                        Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                /// EXPENSES
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "توزيع المصاريف",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                      const SizedBox(height: 25),
+
+                      Stack(
+                        alignment: Alignment.center,
                         children: [
-                          _buildLegendItem("السكن", Color(0xFF2E9E44)),
-                          SizedBox(height: 12),
-                          _buildLegendItem("الطعام", Color(0xFFF04B3A)),
-                          SizedBox(height: 12),
-                          _buildLegendItem("المواصلات", Color(0xFFF6BE00)),
-                          SizedBox(height: 12),
-                          _buildLegendItem("الترفيه", Color(0xFF4256C7)),
-                          SizedBox(height: 12),
-                          _buildLegendItem("سفر", Color(0xFFD6D6D6)),
+                          SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: CircularProgressIndicator(
+                              value: 0.75,
+                              strokeWidth: 25,
+                              backgroundColor: Colors.grey.shade200,
+                              valueColor: AlwaysStoppedAnimation(primaryColor),
+                            ),
+                          ),
+
+                          Column(
+                            children: const [
+                              Text(
+                                "الإجمالي",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "5,120",
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                    ),
-                  ],
+
+                      const SizedBox(height: 30),
+
+                      Wrap(
+                        spacing: 18,
+                        runSpacing: 14,
+                        children: [
+                          legendItem("السكن", Colors.blue),
+                          legendItem("الغذاء", Colors.green),
+                          legendItem("الترفيه", Colors.orange),
+                          legendItem("أخرى", Colors.red),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
 
-                SizedBox(height: 28),
+                const SizedBox(height: 30),
 
-                // Income + Expense cards
+                /// ACTION BUTTONS
                 Row(
                   children: [
                     Expanded(
-                      child: _buildSummaryCard(
-                        title: "المصروفات",
-                        amount: "-1,550.00 ر.ي",
-                        borderColor: Color(0xFFD86B5B),
-                        textColor: Color(0xFFD86B5B),
-                        icon: Icons.arrow_downward_rounded,
+                      child: actionButton(
+                        "إضافة دخل",
+                        Icons.add_circle,
+                        Colors.green,
                       ),
                     ),
-                    SizedBox(width: 14),
+
+                    const SizedBox(width: 15),
+
                     Expanded(
-                      child: _buildSummaryCard(
-                        title: "الدخل",
-                        amount: "+5,000.00 ر.ي",
-                        borderColor: Color(0xFF4D9960),
-                        textColor: Color(0xFF2E9E44),
-                        icon: Icons.arrow_upward_rounded,
+                      child: actionButton(
+                        "إضافة مصروف",
+                        Icons.remove_circle,
+                        Colors.red,
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 90),
+                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -283,122 +377,179 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLegendItem(String title, Color color) {
-    return Row(
+  Widget navItem(IconData icon, String title, bool active) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 14,
-          height: 14,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF222222),
-            ),
+        Icon(icon, color: active ? primaryColor : Colors.grey),
+        const SizedBox(height: 5),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 12,
+            color: active ? primaryColor : Colors.grey,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSummaryCard({
-    required String title,
-    required String amount,
-    required Color borderColor,
-    required Color textColor,
-    required IconData icon,
-  }) {
+  Widget smallIcon(IconData icon) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        color: Colors.white24,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(icon, color: Colors.white),
+    );
+  }
+
+  Widget periodButton(String text, bool active) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: active ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: active ? primaryColor : Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget accountCard(IconData icon, String title, String amount, Color color) {
+    return Container(
+      width: 170,
+      margin: const EdgeInsets.only(left: 15),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: borderColor, width: 2),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: textColor, size: 24),
-          SizedBox(height: 12),
+          Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: color),
+          ),
+
+          const Spacer(),
+
+          Text(title, style: const TextStyle(color: Colors.grey)),
+
+          const SizedBox(height: 8),
+
+          Text(
+            amount,
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget summaryCard(IconData icon, String title, String amount, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color),
+          ),
+
+          const SizedBox(width: 12),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(color: Colors.grey)),
+
+              const SizedBox(height: 4),
+
+              Text(
+                amount,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget legendItem(String title, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+
+        const SizedBox(width: 8),
+
+        Text(title, style: const TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
+
+  Widget actionButton(String title, IconData icon, Color color) {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: color.withOpacity(0.3), blurRadius: 12)],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: Colors.white),
+
+          const SizedBox(width: 10),
+
           Text(
             title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1E1E1E),
-            ),
-          ),
-          SizedBox(height: 10),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              amount,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
           ),
         ],
       ),
     );
   }
-}
-
-class DonutChartPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    double strokeWidth = size.width * 0.22;
-    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
-
-    List<_ChartSegment> segments = [
-      _ChartSegment(color: Color(0xFF2E9E44), value: 28),
-      _ChartSegment(color: Color(0xFFF04B3A), value: 17),
-      _ChartSegment(color: Color(0xFFF6BE00), value: 20),
-      _ChartSegment(color: Color(0xFF10A9E8), value: 14),
-      _ChartSegment(color: Color(0xFF4256C7), value: 10),
-      _ChartSegment(color: Color(0xFFFF9E00), value: 7),
-      _ChartSegment(color: Color(0xFFAF36D3), value: 4),
-      _ChartSegment(color: Color(0xFFE5E5E5), value: 4),
-    ];
-
-    double startAngle = -math.pi / 2;
-    double total = segments.fold(0, (sum, item) => sum + item.value);
-
-    for (var segment in segments) {
-      final paint = Paint()
-        ..color = segment.color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.butt;
-
-      double sweepAngle = (segment.value / total) * 2 * math.pi;
-      canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
-      startAngle += sweepAngle;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-class _ChartSegment {
-  final Color color;
-  final double value;
-
-  _ChartSegment({
-    required this.color,
-    required this.value,
-  });
 }

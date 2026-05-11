@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/HomeScreen.dart';
+import 'screens/AddExpenseScreen.dart';
 
 void main() {
   runApp(MyBudgetApp());
@@ -14,7 +14,7 @@ class MyBudgetApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My Budget',
       theme: ThemeData(primarySwatch: Colors.teal),
-      home: HomeScreen(),
+      home: AddExpenseScreen(),
     );
   }
 }

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/screens/HomeScreen.dart';
+import 'package:my_budget/screens/SearchScreen.dart';
+// import 'package:my_budget/screens/SettingScreen.dart';
+import 'package:my_budget/screens/TransactionsScreen.dart';
+import 'package:my_budget/widgets/nav_item.dart';
 
 class AccountsScreen extends StatelessWidget {
   @override
@@ -275,31 +280,58 @@ class AccountsScreen extends StatelessWidget {
           ),
         ),
 
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 3,
-
-          selectedItemColor: Color(0xff003FB1),
-          unselectedItemColor: Colors.grey,
-
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "الرئيسية"),
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long),
-              label: "العمليات",
+        bottomNavigationBar: Container(
+          height: 85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              top: BorderSide(
+                color: Color(0xffEEEEEE),
+              ),
             ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              navItem(onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+              },
+                icon: Icons.home,
+                label: 'الرئيسية',
 
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle),
-              label: "إضافة",
-            ),
+              ),
 
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet),
-              label: "الحسابات",
-            ),
-          ],
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
+                },
+                icon: Icons.receipt_long,
+                label: 'العمليات',
+                
+              ),
+
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
+                },
+                icon: Icons.account_balance_wallet,
+                label: 'الحسابات',
+                active: true,
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+                },
+                icon: Icons.search,
+                
+                label: 'البحث',
+              ),
+            ],
+          ),
         ),
+
       ),
     );
   }

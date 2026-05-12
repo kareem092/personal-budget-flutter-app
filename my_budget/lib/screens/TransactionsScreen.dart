@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/screens/AccountsScreen.dart';
+import 'package:my_budget/screens/HomeScreen.dart';
+import 'package:my_budget/screens/SearchScreen.dart';
+import 'package:my_budget/screens/SettingScreen.dart';
 import 'package:my_budget/widgets/filterbutton.dart';
+import 'package:my_budget/widgets/nav_item.dart';
 import 'package:my_budget/widgets/transaction_card.dart';
 
-class TransactionsScreen extends StatelessWidget {
+class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
 
+  @override
+  State<TransactionsScreen> createState() => _TransactionsScreenState();
+}
+
+class _TransactionsScreenState extends State<TransactionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -18,36 +28,33 @@ class TransactionsScreen extends StatelessWidget {
           elevation: 1,
           automaticallyImplyLeading: false,
           toolbarHeight: 70,
-          title: Row(
-            children: [
-              const Spacer(),
+          title:  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CircleAvatar(
+                      radius: 22,
+                      backgroundImage: NetworkImage(
+                        "https://i.pravatar.cc/150?img=3",
+                      ),
+                    ),
 
-              const Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.grey,
-              ),
+                    Text(
+                      "ميزانيتك",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
 
-              const SizedBox(width: 12),
-
-              const CircleAvatar(
-                radius: 18,
-                backgroundImage: NetworkImage(
-                  'https://lh3.googleusercontent.com/aida-public/AB6AXuAy6eIsuBQ-I93XFvhDo11G0kz0c3M24M_AMefPz0KWMnBIsqZSSTnn2H7Esq-o1chRdOm4PIum5l6o3ShPy-JfOI-kE-xROz4HZGo_vB1VcBSh4Hk0FNZiSrswOVAMbFedSHw4UqU_UkQXad3zWD_SftKuHPRmlLX_ctYCK8z5N8GOSXl9NP9EZ_dQhgTjYC_QYeTlze0qAiIceJY3d_EH1-KvQtXi_35cUhggOkgwHoKOoKXKptzqQ7N8keYEGfW-p-GY1A76EGGC',
+                    IconButton(icon:Icon(Icons.settings,
+                     size: 30, color: Colors.grey.shade700),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                    },),
+                  ],
                 ),
-              ),
 
-              const SizedBox(width: 10),
-
-              const Text(
-                'ميزانيتك',
-                style: TextStyle(
-                  color: Color(0xff003FB1),
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
         ),
 
         // ================= BODY =================
@@ -246,43 +253,37 @@ class TransactionsScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _navItem(
+              navItem(onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+              },
                 icon: Icons.home,
                 label: 'الرئيسية',
-                
+
               ),
 
-              _navItem(
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
+                },
                 icon: Icons.receipt_long,
                 label: 'العمليات',
                 active: true,
               ),
 
-              Transform.translate(
-                offset: const Offset(0, -25),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff003FB1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                ),
-              ),
-
-              _navItem(
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
+                },
                 icon: Icons.account_balance_wallet,
                 label: 'الحسابات',
               ),
 
-              _navItem(
-                icon: Icons.more_horiz,
-                label: 'المزيد',
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+                },
+                icon: Icons.search,
+                label: 'اعدادات',
               ),
             ],
           ),
@@ -292,37 +293,6 @@ class TransactionsScreen extends StatelessWidget {
   }
 
   // ================= WIDGETS =================
-
-  // Widget _filterChip({
-  //   required String title,
-  //   bool active = false,
-  // }) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(left: 8),
-  //     child: Container(
-  //       padding: const EdgeInsets.symmetric(
-  //         horizontal: 18,
-  //         vertical: 10,
-  //       ),
-  //       decoration: BoxDecoration(
-  //         color: active
-  //             ? const Color(0xff003FB1)
-  //             : const Color(0xffE7E8E9),
-  //         borderRadius: BorderRadius.circular(30),
-  //       ),
-  //       child: Text(
-  //         title,
-  //         style: TextStyle(
-  //           color: active
-  //               ? Colors.white
-  //               : const Color(0xff434654),
-  //           fontSize: 14,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _sectionTitle({
     required String title,
     required String date,
@@ -348,8 +318,6 @@ class TransactionsScreen extends StatelessWidget {
       ],
     );
   }
-
- 
 
   Widget _divider() {
     return const Divider(
@@ -437,41 +405,6 @@ class TransactionsScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _navItem({
-    required IconData icon,
-    required String label,
-    bool active = false,
-  }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          onPressed: () {
-            
-          },
-          icon:Icon(icon),
-          color: active
-              ? const Color(0xff003FB1)
-              : Colors.grey,
-              
-        ),
-
-        
-
-        Text(
-          label,
-          style: TextStyle(
-            color: active
-                ? const Color(0xff003FB1)
-                : Colors.grey,
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }

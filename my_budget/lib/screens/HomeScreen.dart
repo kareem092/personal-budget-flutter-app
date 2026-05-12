@@ -1,26 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/screens/AccountsScreen.dart';
+import 'package:my_budget/screens/AddExpenseScreen.dart';
 import 'package:my_budget/screens/AddIncomeScreen.dart';
+import 'package:my_budget/screens/SearchScreen.dart';
+import 'package:my_budget/screens/SettingScreen.dart';
 import 'package:my_budget/screens/TransactionsScreen.dart';
 import 'package:my_budget/screens/categoriesScreen.dart';
-
-void main() {
-  runApp(MyBudgetApp());
-}
-
-class MyBudgetApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'ميزانيتك',
-      theme: ThemeData(
-        fontFamily: 'Tajawal',
-        scaffoldBackgroundColor: const Color(0xffF8F9FA),
-      ),
-      home: HomeScreen(),
-    );
-  }
-}
+import 'package:my_budget/widgets/nav_item.dart';
 
 class HomeScreen extends StatelessWidget {
   final Color primaryColor = const Color(0xff1A56DB);
@@ -31,34 +17,57 @@ class HomeScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xffF8F9FA),
-
         floatingActionButton: FloatingActionButton(
           backgroundColor: primaryColor,
           child: const Icon(Icons.add, color: Colors.white),
           onPressed: () {},
         ),
 
-        bottomNavigationBar: Container(
-          height: 75,
+        bottomNavigationBar:  Container(
+          height: 85,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+            border: Border(
+              top: BorderSide(
+                color: Color(0xffEEEEEE),
+              ),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              navItem(Icons.home, "الرئيسية", true,(){
+              navItem(onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+              },
+                icon: Icons.home,
+                label: 'الرئيسية',
+                active: true,
+              ),
 
-              }),
-              navItem(Icons.receipt_long, "العمليات", false,
-              (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => TransactionsScreen(),));
-              }),
-              navItem(Icons.add_circle, "إضافة", false,(){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => IncomeScreen(),));
-              }),
-              navItem(Icons.account_balance_wallet, "الحسابات", false,(){}),
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
+                },
+                icon: Icons.receipt_long,
+                label: 'العمليات',
+                
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
+                },
+                icon: Icons.account_balance_wallet,
+                label: 'الحسابات',
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+                },
+                icon: Icons.search,
+                label: 'البحث',
+              ),
             ],
           ),
         ),
@@ -88,7 +97,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Icon(Icons.menu, size: 30, color: Colors.grey.shade700),
+                    IconButton(icon:Icon(Icons.settings,
+                     size: 30, color: Colors.grey.shade700),
+                    onPressed: () {
+                      
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                    },),
                   ],
                 ),
 
@@ -363,6 +377,9 @@ class HomeScreen extends StatelessWidget {
                         "إضافة دخل",
                         Icons.add_circle,
                         Colors.green,
+                        (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => IncomeScreen()));
+                        }
                       ),
                     ),
 
@@ -373,6 +390,9 @@ class HomeScreen extends StatelessWidget {
                         "إضافة مصروف",
                         Icons.remove_circle,
                         Colors.red,
+                        (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddExpenseScreen()));
+                        }
                       ),
                     ),
                   ],
@@ -384,24 +404,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget navItem(IconData icon, String title, bool active, VoidCallback onPressed) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-       IconButton(onPressed: onPressed, icon: Icon(icon, color: active ? primaryColor : Colors.grey),) 
-       , const SizedBox(height: 5),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 12,
-            color: active ? primaryColor : Colors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 
@@ -535,30 +537,34 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget actionButton(String title, IconData icon, Color color) {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: color.withOpacity(0.3), blurRadius: 12)],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white),
-
-          const SizedBox(width: 10),
-
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+  Widget actionButton(String title, IconData icon, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      
+      onPressed: onPressed,
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: color, )],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white),
+      
+            const SizedBox(width: 10),
+      
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

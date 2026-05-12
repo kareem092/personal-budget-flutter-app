@@ -1,287 +1,288 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
+import 'package:my_budget/screens/AccountsScreen.dart';
 import 'package:my_budget/screens/HomeScreen.dart';
 import 'package:my_budget/screens/SearchScreen.dart';
 import 'package:my_budget/screens/TransactionsScreen.dart';
 import 'package:my_budget/screens/TransferScreen.dart';
+import 'package:my_budget/widgets/nav_item.dart';
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+   SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
-    
-      bottomNavigationBar: Container(
-        height: 75,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(color: Color(0xffE5E5E5)),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children:  [
-            BottomNavItem(
-              icon: Icons.home_outlined,
-              title: "الرئيسية", onPressed: () { 
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>HomeScreen()));
-               },
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: const Color(0xffF5F5F5),
+      
+        bottomNavigationBar:  Container(
+            height: 85,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: BorderSide(
+                  color: Color(0xffEEEEEE),
+                ),
+              ),
             ),
-            BottomNavItem(
-              icon: Icons.receipt_long,
-              title: "العمليات", onPressed: () {  Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>TransactionsScreen())); },
-            ),
-            BottomNavItem(icon: Icons.search, title: 'البحث', onPressed: (){
-               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>SearchScreen()));
-                        }),
-            BottomNavItem(
-              icon: Icons.account_balance_wallet_outlined,
-              title: "التحويلات", onPressed: () {  Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>Transferscreen())); },
-            ),
-            BottomNavItem(
-              onPressed: () {
-                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=>SettingsScreen()));
-              },
-              icon: Icons.settings,
-              title: "الإعدادات",
-              active: true,
-            ),
-          ],
-        ),
-      ),
-    
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-    
-                const SizedBox(height: 12),
-    
-                /// TOP BAR
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "ميزانيتي",
-                      style: TextStyle(
-                        color: Color(0xff1F4ED8),
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ).tr(),
-    
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Color(0xffEDEDED),
-                          child: Icon(Icons.person),
+                navItem(onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+                },
+                  icon: Icons.home,
+                  label: 'الرئيسية',
+                  
+                ),
+      
+                navItem(
+                  onPressed: () {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
+                  },
+                  icon: Icons.receipt_long,
+                  label: 'العمليات',
+                  
+                ),
+      
+                navItem(
+                  onPressed: () {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
+                  },
+                  icon: Icons.account_balance_wallet,
+                  label: 'الحسابات',
+                ),
+      
+                navItem(
+                  onPressed: () {
+                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+                  },
+                  icon: Icons.search,
+                  label: 'البحث',
+                ),
+              ],
+            ),
+          ),
+      
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+      
+                  const SizedBox(height: 12),
+      
+                  /// TOP BAR
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CircleAvatar(
+                        radius: 22,
+                        backgroundImage: NetworkImage(
+                          "https://i.pravatar.cc/150?img=3",
                         ),
-    
-                        const SizedBox(width: 14),
-    
-                        Icon(
-                          Icons.search,
-                          color: Colors.grey.shade700,
+                      ),
+      
+                      Text(
+                        "ميزانيتك",
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+      
+                     
+                    ],
+                  ),
+      
+                  const SizedBox(height: 28),
+      
+                  /// TITLE
+                   Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          "الإعدادات",
+                          style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "قم بتخصيص تجربتك المالية وتأمين بياناتك.",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-    
-                const SizedBox(height: 28),
-    
-                /// TITLE
-                 Center(
-                  child: Column(
+                  ),
+      
+                  const SizedBox(height: 24),
+      
+                  /// CARD 1
+                  const SettingsCard(
+                    title: "إدارة الميزانية",
+                    icon: Icons.account_balance_wallet_outlined,
+                    iconBg: Color(0xffEEF2FF),
                     children: [
-                      Text(
-                        "الإعدادات",
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ).tr(),
-                      SizedBox(height: 8),
-                      Text(
-                        "قم بتخصيص تجربتك المالية وتأمين بياناتك.",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
-                      ).tr(),
+                      SettingsSwitchTile(
+                        title: "ترحيل الرصيد",
+                        subtitle: "نقل الميزانية المتبقية للشهر القادم",
+                      ),
+                      Divider(),
+                      SettingsArrowTile(
+                        title: "العمليات المتكررة",
+                        subtitle: "إدارة الاشتراكات والمصاريف الثابتة",
+                      ),
+                      Divider(),
+                      SettingsArrowTile(
+                        title: "خيارات وضع الميزانية",
+                        subtitle: "تعديل الأهداف والحدود الشهرية",
+                      ),
                     ],
                   ),
-                ),
-    
-                const SizedBox(height: 24),
-    
-                /// CARD 1
-                const SettingsCard(
-                  title: "إدارة الميزانية",
-                  icon: Icons.account_balance_wallet_outlined,
-                  iconBg: Color(0xffEEF2FF),
-                  children: [
-                    SettingsSwitchTile(
-                      title: "ترحيل الرصيد",
-                      subtitle: "نقل الميزانية المتبقية للشهر القادم",
-                    ),
-                    Divider(),
-                    SettingsArrowTile(
-                      title: "العمليات المتكررة",
-                      subtitle: "إدارة الاشتراكات والمصاريف الثابتة",
-                    ),
-                    Divider(),
-                    SettingsArrowTile(
-                      title: "خيارات وضع الميزانية",
-                      subtitle: "تعديل الأهداف والحدود الشهرية",
-                    ),
-                  ],
-                ),
-    
-                const SizedBox(height: 18),
-    
-                /// CARD 2
-                const SettingsCard(
-                  title: "التفضيلات",
-                  icon: Icons.language,
-                  iconBg: Color(0xffE9F9F1),
-                  children: [
-                    SettingsArrowTile(
-                      title: "لغة التطبيق",
-                      subtitle: "العربية",
-                      leading: Icons.translate,
-                    ),
-                    Divider(),
-                    SettingsArrowTile(
-                      title: "العملة الأساسية",
-                      subtitle: "ريال سعودي (SAR)",
-                      leading: Icons.payments_outlined,
-                    ),
-                    Divider(),
-                    SettingsSwitchTile(
-                      title: "الوضع الليلي",
-                      subtitle: "تلقائي حسب إعدادات النظام",
-                    ),
-                  ],
-                ),
-    
-                const SizedBox(height: 18),
-    
-                /// CARD 3
-                const SettingsCard(
-                  title: "الأمان والبيانات",
-                  icon: Icons.shield_outlined,
-                  iconBg: Color(0xffFFF0F0),
-                  children: [
-                    SettingsSwitchBox(
-                      title: "قفل التطبيق",
-                      subtitle: "استخدام FaceID أو رمز القفل",
-                      icon: Icons.lock_outline,
-                    ),
-    
-                    SizedBox(height: 14),
-    
-                    SettingsButtonTile(
-                      title: "النسخ الاحتياطي",
-                      subtitle: "آخر مزامنة منذ ساعتين",
-                      icon: Icons.cloud_upload_outlined,
-                    ),
-    
-                    SizedBox(height: 14),
-    
-                    SettingsButtonTile(
-                      title: "تصدير البيانات",
-                      subtitle: "تحميل ملف Excel أو CSV",
-                      icon: Icons.file_copy_outlined,
-                    ),
-    
-                    SizedBox(height: 14),
-    
-                    DeleteAccountTile(),
-                  ],
-                ),
-    
-                const SizedBox(height: 24),
-    
-                /// HELP BOX
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xff1F4ED8),
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  child: Column(
+      
+                  const SizedBox(height: 18),
+      
+                  /// CARD 2
+                  const SettingsCard(
+                    title: "التفضيلات",
+                    icon: Icons.language,
+                    iconBg: Color(0xffE9F9F1),
                     children: [
-                      const Text(
-                        "هل تحتاج للمساعدة؟",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SettingsArrowTile(
+                        title: "لغة التطبيق",
+                        subtitle: "العربية",
+                        leading: Icons.translate,
                       ),
-    
-                      const SizedBox(height: 10),
-    
-                      const Text(
-                        "مركز الدعم متاح دائماً للإجابة على استفساراتك المالية.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 15,
-                        ),
+                      Divider(),
+                      SettingsArrowTile(
+                        title: "العملة الأساسية",
+                        subtitle: "ريال سعودي (SAR)",
+                        leading: Icons.payments_outlined,
                       ),
-    
-                      const SizedBox(height: 22),
-    
-                      Container(
-                        width: 170,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                      Divider(),
+                      SettingsSwitchTile(
+                        title: "الوضع الليلي",
+                        subtitle: "تلقائي حسب إعدادات النظام",
+                      ),
+                    ],
+                  ),
+      
+                  const SizedBox(height: 18),
+      
+                  /// CARD 3
+                  const SettingsCard(
+                    title: "الأمان والبيانات",
+                    icon: Icons.shield_outlined,
+                    iconBg: Color(0xffFFF0F0),
+                    children: [
+                      SettingsSwitchBox(
+                        title: "قفل التطبيق",
+                        subtitle: "استخدام FaceID أو رمز القفل",
+                        icon: Icons.lock_outline,
+                      ),
+      
+                      SizedBox(height: 14),
+      
+                      SettingsButtonTile(
+                        title: "النسخ الاحتياطي",
+                        subtitle: "آخر مزامنة منذ ساعتين",
+                        icon: Icons.cloud_upload_outlined,
+                      ),
+      
+                      SizedBox(height: 14),
+      
+                      SettingsButtonTile(
+                        title: "تصدير البيانات",
+                        subtitle: "تحميل ملف Excel أو CSV",
+                        icon: Icons.file_copy_outlined,
+                      ),
+      
+                      SizedBox(height: 14),
+      
+                      DeleteAccountTile(),
+                    ],
+                  ),
+      
+                  const SizedBox(height: 24),
+      
+                  /// HELP BOX
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff1F4ED8),
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "هل تحتاج للمساعدة؟",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        child: const Center(
-                          child: Text(
-                            "تواصل معنا",
-                            style: TextStyle(
-                              color: Color(0xff1F4ED8),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+      
+                        const SizedBox(height: 10),
+      
+                        const Text(
+                          "مركز الدعم متاح دائماً للإجابة على استفساراتك المالية.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 15,
+                          ),
+                        ),
+      
+                        const SizedBox(height: 22),
+      
+                        Container(
+                          width: 170,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "تواصل معنا",
+                              style: TextStyle(
+                                color: Color(0xff1F4ED8),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-    
-                const SizedBox(height: 26),
-    
-                const Center(
-                  child: Text(
-                    "ميزانيتي - الإصدار 2.4.0 (2024)",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
+                      ],
                     ),
                   ),
-                ),
-    
-                const SizedBox(height: 20),
-              ],
+      
+                  const SizedBox(height: 26),
+      
+                  const Center(
+                    child: Text(
+                      "ميزانيتي - الإصدار 2.4.0 (2024)",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+      
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

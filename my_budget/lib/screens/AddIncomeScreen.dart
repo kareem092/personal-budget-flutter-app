@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_budget/screens/AccountsScreen.dart';
 import 'package:my_budget/screens/HomeScreen.dart';
+import 'package:my_budget/screens/SearchScreen.dart';
 import 'package:my_budget/screens/TransactionsScreen.dart';
+import 'package:my_budget/widgets/nav_item.dart';
+
 
 class IncomeScreen extends StatelessWidget {
   const IncomeScreen({super.key});
@@ -14,48 +17,52 @@ class IncomeScreen extends StatelessWidget {
         backgroundColor: const Color(0xffF8F9FA),
 
         // Bottom Navigation
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                bottomNavigationBar: Container(
+          height: 85,
           decoration: const BoxDecoration(
             color: Colors.white,
             border: Border(
               top: BorderSide(
-                color: Color(0xffE5E7EB),
+                color: Color(0xffEEEEEE),
               ),
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:  [
-              BottomNavItem(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
-                },
-                icon: Icons.home_outlined,
-                title: "الرئيسية",
+            children: [
+              navItem(onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+              },
+                icon: Icons.home,
+                label: 'الرئيسية',
+
               ),
-              BottomNavItem(
+
+              navItem(
                 onPressed: () {
                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
                 },
-                icon: Icons.receipt_long_outlined,
-                title: "العمليات",
+                icon: Icons.receipt_long,
+                label: 'العمليات',
+                
               ),
-              BottomNavItem(
-                onPressed: () {
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>IncomeScreen()));
-                },
-                icon: Icons.add_circle,
-                title: "إضافة",
-                active: true,
-                iconSize: 34,
-              ),
-              BottomNavItem(
+
+
+              navItem(
                 onPressed: () {
                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
                 },
-                icon: Icons.account_balance_wallet_outlined,
-                title: "الحسابات",
+                icon: Icons.account_balance_wallet,
+                label: 'الحسابات',               
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchScreen()));
+                },
+                icon: Icons.search,
+                
+                label: 'البحث',
               ),
             ],
           ),
@@ -77,9 +84,14 @@ class IncomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.grey,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_outlined,
+                        color: Colors.grey,
+                      ),
                     ),
 
                     Row(
@@ -123,22 +135,7 @@ class IncomeScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "مصروفات",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                      
 
                       Expanded(
                         child: Container(

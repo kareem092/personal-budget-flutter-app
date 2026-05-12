@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_budget/screens/AccountsScreen.dart';
+import 'package:my_budget/screens/HomeScreen.dart';
+import 'package:my_budget/screens/SettingScreen.dart';
+import 'package:my_budget/screens/TransactionsScreen.dart';
+import 'package:my_budget/widgets/nav_item.dart';
 
 
 
@@ -47,7 +52,54 @@ class TransferPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: Container(
+          height: 85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              top: BorderSide(
+                color: Color(0xffEEEEEE),
+              ),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              navItem(onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeScreen()));
+              },
+                icon: Icons.home,
+                label: 'الرئيسية',
+
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>TransactionsScreen()));
+                },
+                icon: Icons.receipt_long,
+                label: 'العمليات',
+                active: true,
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountsScreen()));
+                },
+                icon: Icons.account_balance_wallet,
+                label: 'الحسابات',
+              ),
+
+              navItem(
+                onPressed: () {
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                },
+                icon: Icons.settings,
+                label: 'اعدادات',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -277,21 +329,4 @@ class TransferPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  // شريط التنقل السفلي
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: const Color(0xFF003FB1),
-      unselectedItemColor: Colors.grey,
-      currentIndex: 2, // "الفئات" مفعلة بناءً على التصميم
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'الإعدادات'),
-        BottomNavigationBarItem(icon: Icon(Icons.category), label: 'الفئات'),
-        BottomNavigationBarItem(icon: Icon(Icons.equalizer), label: 'الإحصائيات'),
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-      ],
-    );
-  }
-}
+  }}
